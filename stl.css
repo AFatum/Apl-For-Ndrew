@@ -1,0 +1,21 @@
+table {
+  font-family: "Arial", "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+}
+caption {
+  background: #7c7cff;
+  color: white;
+  padding: 6px 12px;
+  font-weight: bold;
+}
+th {
+  color: #339;
+  padding: 10px 12px;
+ }
+td {
+  color: #669;
+  border-top: 1px solid white;
+  padding: 10px 12px;
+}
+tr:hover td {
+  background: #f2ff91; 
+}
