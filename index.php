@@ -33,14 +33,17 @@
       <?php // вносим изменения, если тур выбран
         if($_POST['tour'])
         {
-          $gen = new Gen($db);
           if(!$res = $gen->getTour($_POST['tour']))
             echo "Нет выбранных туров";
           else
           {
-            echo "<pre>";
-            var_dump($res);
-            echo "</pre>";
+            echo "<table>";
+            echo "<caption>Тур ".$_POST['tour']."</caption>";
+            foreach($res as $r)
+            {
+              
+            }
+            echo "</table>";
           }         
         }
       ?>

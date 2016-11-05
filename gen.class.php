@@ -1,10 +1,11 @@
 <?php
   ob_start();
-  $db = new mysqli("localhost", "root", "", "apl");
+  //$db = new mysqli("localhost", "root", "", "apl");
 
   class Gen
   {
-    public $db;
+    protected $db;
+    
     
     function __construct (mysqli $db)
     {  
@@ -14,7 +15,7 @@
         else $this->db = $db; // если всё нормально, присваиваем значение $db;
     }
     
-    function getTour($t = "all")
+    /*function getTour($t = "all")
     {
       if(is_string($t))
         $sql = "SELECT * FROM results";
@@ -30,7 +31,22 @@
           return false;
         }
         else return $res->fetch_all(MYSQLI_ASSOC);
+      }  */ 
+    function getTour($t = "all")
+    {
+      if(!is_int($t)) $t = (int) abs($t);
+      
+      $sql = "SELECT * FROM rt".$t;
+
+      if(!$res = $this->db->query($sql))
+      {
+          throw new Exception("не удалось выбрать данные результатов матчей: (".$this->db->errno.") ". $this->db->error);
+          return false;
       }
+      else return $res->fetch_all(MYSQLI_ASSOC);
     }
+  }
+
+  $gen = new Gen(new mysqli("localhost", "root", "", "apl"));
 
 ?>
