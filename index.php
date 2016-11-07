@@ -24,7 +24,13 @@
       <form action="" method="post">
         <p>Выберите тур:
         <select name="tour">
-        <?php for($i=1; $i<=38; $i++) echo "<option value = ".$i.">".$i."</option>"; ?>
+        <?php 
+          for($i=1; $i<=38; $i++) 
+          {
+            $sel = ($_POST['tour'] == $i) ? " selected" : NULL;
+            echo "<option".$sel." value = ".$i.">".$i."</option>";
+          }
+        ?>
         </select>
         <input type="submit" value="выбрать">
         </p>
@@ -41,7 +47,13 @@
             echo "<caption>Тур ".$_POST['tour']."</caption>";
             foreach($res as $r)
             {
-              
+              $sch = $r['g1'].":".$r['g2'];
+              echo "<tr>";
+              echo "<td>".$r['t1']."</td>";
+              echo "<td>".$sch."</td>";
+              echo "<td>".$r['t2']."</td>";
+              echo "<td>".$r['date']."</td>";
+              echo "</tr>";
             }
             echo "</table>";
           }         

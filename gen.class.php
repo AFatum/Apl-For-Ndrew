@@ -5,6 +5,7 @@
   class Gen
   {
     protected $db;
+    private static $_instance;
     
     
     function __construct (mysqli $db)
@@ -15,9 +16,9 @@
         else $this->db = $db; // если всё нормально, присваиваем значение $db;
     }
     
-    /*function getTour($t = "all")
+    function getTour($t = "all")
     {
-      if(is_string($t))
+      if($t == 'all')
         $sql = "SELECT * FROM results";
       else
        {
@@ -31,12 +32,13 @@
           return false;
         }
         else return $res->fetch_all(MYSQLI_ASSOC);
-      }  */ 
+      }  
+    /*
     function getTour($t = "all")
     {
       if(!is_int($t)) $t = (int) abs($t);
       
-      $sql = "SELECT * FROM rt".$t;
+      $sql = "SELECT * FROM results_tour".$t;
 
       if(!$res = $this->db->query($sql))
       {
@@ -45,6 +47,7 @@
       }
       else return $res->fetch_all(MYSQLI_ASSOC);
     }
+      */ 
   }
 
   $gen = new Gen(new mysqli("localhost", "root", "", "apl"));
