@@ -35,6 +35,29 @@
         <input type="submit" value="выбрать">
         </p>
       </form>
+      <form action="" method="post">
+        <p>Выберите диапазон туров от:
+        <select name="tour_ot">
+        <?php 
+          for($i=1; $i<=38; $i++) 
+          {
+            $sel = ($_POST['tour_ot'] == $i) ? " selected" : NULL;
+            echo "<option".$sel." value = ".$i.">".$i."</option>";
+          }
+          ?></select> и до:&nbsp;<select name="tour_do">
+        <?php 
+          for($i=1; $i<=38; $i++) 
+          {
+            //if($i < $_POST['tour_ot']) continue;
+            $sel = ($_POST['tour_do'] == $i) ? " selected" : NULL;
+            echo "<option".$sel." value = ".$i.">".$i."</option>";
+          }
+        ?>
+        </select>
+        <input type="submit" value="выбрать">
+        </p>
+      </form>
+      
       
       <?php // вносим изменения, если тур выбран
         if($_POST['tour'])
@@ -42,21 +65,11 @@
           if(!$res = $gen->getTour($_POST['tour']))
             echo "Нет выбранных туров";
           else
-          {
-            echo "<table>";
-            echo "<caption>Тур ".$_POST['tour']."</caption>";
-            foreach($res as $r)
-            {
-              $sch = $r['g1'].":".$r['g2'];
-              echo "<tr>";
-              echo "<td>".$r['t1']."</td>";
-              echo "<td>".$sch."</td>";
-              echo "<td>".$r['t2']."</td>";
-              echo "<td>".$r['date']."</td>";
-              echo "</tr>";
-            }
-            echo "</table>";
-          }         
+            $gen->getTable($_POST['tour'], $res);
+        }
+        if($_POST['tour_ot'] or $_POST['tour_do'])
+        {
+            $gen->getTableDiap($_POST['tour_ot'], $_POST['tour_do'], $res);
         }
       ?>
     
