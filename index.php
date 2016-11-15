@@ -30,6 +30,14 @@
       
       $gt = ($_GET['cal']) ? "?cal=".$_GET['cal'] : NULL;
       
+      if($_POST['g1'] and $_POST['g2'])
+      {
+        $_SESSION['g1'] = $_POST['g1'];
+        $_SESSION['g2'] = $_POST['g2'];
+        $_SESSION['upd'] = true;
+        $gt = "?cal=".$_GET['cal']."&upd=".$_GET['upd'];
+      }
+      
       header("Location: index.php".$gt);
     }
   
@@ -91,7 +99,23 @@
       
         if($_GET['cal'] == 2) // отображаем весь календарь
           $gen->getTableDiap(1, 38, $_GET['upd']);
-    } // конец $_GET['cal'] 
+    } // конец $_GET['cal']
+    
+    if($_SESSION['upd']) // вносим изменения результатов в БД
+    {
+      $match = []; // результатирующий массив, для передачи данных
+      foreach($_SESSION['g1'] as $key => $val)
+      {
+        if($val == '-') continue;
+        $match[$key]['g1'] = (int) abs($val);
+      }
+      
+      foreach($_SESSION['g2'] as $key => $val)
+      {
+        if($val == '-') continue;
+        $match[$key]['g2'] = (int) abs($val);
+      }  
+    }
   
   
   ?>

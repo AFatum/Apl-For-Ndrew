@@ -57,17 +57,18 @@
       if(!is_int($t)) $t = (int) abs($t);
       if(!is_array($res) or count($res) < 1) return false;
       
-      if($upd == $t)
+      if($upd == $t) // отображаем форму для внесения данных о результатах матчей
       {
         echo "<table>";
           echo "<caption>Тур ".$t."</caption>";
           echo "<form action='' method='post'>";
           foreach($res as $r)
           {
+            //echo "<input type='hidden' name='id_m' value='".$r['id']."'>";
             echo "<tr>";
             echo "<td>".$r['t1']."</td>";
 
-            echo "<td><select name='g1'>";
+            echo "<td><select name='g1[".$r['id']."]'>";
             if($r['g1'] === NULL) $sel = "selected";
             echo "<option ".$sel." value='-'>&ndash;</option>";
               for($i=0; $i<10; $i++)
@@ -81,7 +82,8 @@
 
             echo "<td> : </td>";
 
-            echo "<td><select name='g2'>";
+            //echo "<td><select name='g2'>";
+            echo "<td><select name='g2[".$r['id']."]'>";
             echo "<option value='-'>&ndash;</option>";
               for($i=0; $i<10; $i++)
               {
