@@ -166,6 +166,48 @@
             echo "<br>";
       }
     }
+    
+      /**
+     * вносим данные в БД
+     * @param array, $g1  - значение голов забитыми хозяевами
+     * @param array, $g2  - значение голов забитыми гостями
+     * return bool;
+     */
+    function setRes(array $g1, array $g2)
+    {
+      if(!is_array($g1) or !is_array($g2)) return false;
+      
+      $match = []; // результатирующий массив, для передачи данных
+      foreach($g1 as $key => $val)
+      {
+        if($val == '-') continue;
+        $match[$key]['g1'] = (int) abs($val);
+      }
+      
+      foreach($g2 as $key => $val)
+      {
+        if($val == '-') continue;
+        $match[$key]['g2'] = (int) abs($val);
+      }
+      
+      $upd = [];
+      foreach($match as $key => $val)
+      {
+        $upd[$key] = "UPDATE results
+                        SET g1 = ";
+        foreach($val as $k => $v)
+        {
+          if($k == 'g1') $upd[$key] .= $v.", ";
+          if($k == 'g2') $upd[$key] .= "g2 = ".$v;
+        }
+        $upd[$key] .= " WHERE ID = ".$key;
+      }
+      
+      foreach ($upd as $sql)
+        if(!$this->db->query($sql)) return false;
+      return true;
+      //return $sql;
+    }
   }
 
   $gen = new Gen(new mysqli("localhost", "root", "", "pl"));

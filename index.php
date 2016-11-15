@@ -101,20 +101,13 @@
           $gen->getTableDiap(1, 38, $_GET['upd']);
     } // конец $_GET['cal']
     
-    if($_SESSION['upd']) // вносим изменения результатов в БД
+    //if($_SESSION['upd']) // вносим изменения результатов в БД
+    if($_SESSION['g1'] and $_SESSION['g2']) // вносим изменения результатов в БД
     {
-      $match = []; // результатирующий массив, для передачи данных
-      foreach($_SESSION['g1'] as $key => $val)
-      {
-        if($val == '-') continue;
-        $match[$key]['g1'] = (int) abs($val);
-      }
-      
-      foreach($_SESSION['g2'] as $key => $val)
-      {
-        if($val == '-') continue;
-        $match[$key]['g2'] = (int) abs($val);
-      }  
+      $mat = $gen->setRes($_SESSION['g1'], $_SESSION['g2']);
+      $mes = ($mat) ? "Данные внесены успешно" 
+                    : "Произошла ошибка при внесении данных: ".$gen->db->error;
+      echo $mes;
     }
   
   
