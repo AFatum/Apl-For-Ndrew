@@ -148,4 +148,15 @@ ALTER TABLE results ADD INDEX tur (tour);
 EXPLAIN SELECT * FROM results WHERE tour = 1;
 SELECT * FROM results WHERE tour = 1;
 				
-CREATE TABLE result_s SELECT * FROM results;				
+CREATE TABLE result_s SELECT * FROM results;
+
+UPDATE results
+	SET tour = 9
+	WHERE id > 80
+		AND id < 91;
+		
+UPDATE results
+	SET	g1 = NULL,
+		g2 = NULL
+	WHERE id = 82
+		OR id = 84;

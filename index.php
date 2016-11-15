@@ -110,6 +110,7 @@
       echo $mes;
     }
   
+  //catch (Exception $e){ echo $e->getMessage()."<br>"; }
   
   ?>
 </body>

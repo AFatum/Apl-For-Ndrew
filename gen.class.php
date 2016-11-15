@@ -5,7 +5,7 @@
 
   class Gen
   {
-    protected $db;
+    public $db;
     private static $_instance;
     
     /**
@@ -173,6 +173,7 @@
      * @param array, $g2  - значение голов забитыми гостями
      * return bool;
      */
+    
     function setRes(array $g1, array $g2)
     {
       if(!is_array($g1) or !is_array($g2)) return false;
@@ -194,7 +195,9 @@
       foreach($match as $key => $val)
       {
         $upd[$key] = "UPDATE results
-                        SET g1 = ";
+                        SET t1 = t1,
+                        t2 = t2,
+                        g1 = ";
         foreach($val as $k => $v)
         {
           if($k == 'g1') $upd[$key] .= $v.", ";
@@ -208,6 +211,7 @@
       return true;
       //return $sql;
     }
+    
   }
 
   $gen = new Gen(new mysqli("localhost", "root", "", "pl"));

@@ -1,4 +1,4 @@
-INSERT INTO pl (name) VALUES ('Арсенал'),
+INSERT INTO apl (name) VALUES ('Арсенал'),
 							('Бернли'),
 							('Борнмут'),
 							('Вест Бромвич'),
