@@ -210,6 +210,99 @@
       //return $sql;
     }
     
+     /**
+     * Показываем турнирную таблицу
+     * @param array, $g1  - значение голов забитыми хозяевами
+     * @param array, $g2  - значение голов забитыми гостями
+     * return bool;
+     */
+    
+    function showTurTable()
+    {
+      $sql = "SELECT * FROM apl ORDER BY points DESC";
+      
+      if(!$res = $this->db->query($sql))
+        return "Произошла ошибка получения данных".$this->db->error;
+      //return $res->fetch_all(MYSQLI_ASSOC);
+      
+      echo "<table><caption>Турнирная таблица Английской Премьер-Лиги</caption>";
+      echo "<tr>";
+      echo "<th>#</th>";
+      echo "<th>".$this->rusDate()."</th>";
+      echo "<th>И</th>";
+      echo "<th>В</th>";
+      echo "<th>Н</th>";
+      echo "<th>П</th>";
+      echo "<th>ЗАБ</th>";
+      echo "<th>ПРО</th>";
+      echo "<th>РАЗН</th>";
+      echo "<th>О</th>";
+      echo "</tr>";
+      $i = 1;
+      foreach($res->fetch_all(MYSQLI_ASSOC) as $items)
+      {
+        echo "<tr>";
+        echo "<td>".$i."</td>";
+        foreach ($items as $k => $it) // выводим данные из турнирной таблицы
+        { if($k == 'id') continue; echo "<td>".$it."</td>"; }
+        echo "</tr>";
+        $i++;
+      }
+      echo "</table>";
+    }
+    
+      /**
+     * Переводчик месяцев для date()
+     * @param string, $m  - значение месяца, который нужно перевести
+     * return string; // возвращает русское название месяца
+     */
+    
+    function transMonth($m)
+    {
+      switch($m)
+      {
+        case 'January':   return 'Январь';
+        case 'February':  return 'Февраль';
+        case 'March':     return 'Март';
+        case 'April':     return 'Апрель';
+        case 'May':       return 'Май';
+        case 'June':      return 'Июнь';
+        case 'July':      return 'Июль';
+        case 'August':    return 'Август';
+        case 'September': return 'Сентябрь';
+        case 'October':   return 'Октябрь';
+        case 'November':  return 'Ноябрь';
+        case 'December':  return 'Декабрь';
+        default:  return $m;
+      }
+    }
+    
+     /**
+     * Форматировщик даты для date()
+     * return string; // преобразовывает значение в русский формат
+     */
+    function rusDate()
+    {
+      $m;
+      switch(date('F'))
+      {
+        case 'January':   $m = 'Январь'; break;
+        case 'February':  $m = 'Февраль'; break;
+        case 'March':     $m = 'Март'; break;
+        case 'April':     $m = 'Апрель'; break;
+        case 'May':       $m = 'Май'; break;
+        case 'June':      $m = 'Июнь'; break;
+        case 'July':      $m = 'Июль'; break;
+        case 'August':    $m = 'Август'; break;
+        case 'September': $m = 'Сентябрь'; break;
+        case 'October':   $m = 'Октябрь'; break;
+        case 'November':  $m = 'Ноябрь'; break;
+        case 'December':  $m = 'Декабрь'; break;
+        default:  $m = date('F');
+      }
+      return date('d').$m.date('Y');
+    }
+    
   }
 
   $gen = new Gen(new mysqli("localhost", "root", "", "pl"));
