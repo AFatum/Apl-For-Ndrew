@@ -195,9 +195,7 @@
       foreach($match as $key => $val)
       {
         $upd[$key] = "UPDATE results
-                        SET t1 = t1,
-                        t2 = t2,
-                        g1 = ";
+                        SET g1 = ";
         foreach($val as $k => $v)
         {
           if($k == 'g1') $upd[$key] .= $v.", ";

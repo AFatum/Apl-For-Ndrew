@@ -160,3 +160,24 @@ UPDATE results
 		g2 = NULL
 	WHERE id = 82
 		OR id = 84;
+		
+UPDATE results 
+SET g1 = NULL, g2 = NULL
+WHERE g1 IS NOT NULL
+OR g2 IS NOT NULL;
+		
+SELECT * FROM results
+WHERE g1 IS NOT NULL
+OR g2 IS NOT NULL;
+
+UPDATE apl
+SET plays = 0,
+	wins = 0,
+	nich = 0,
+	lose = 0,
+	goals_out = 0,
+	goals_in = 0,
+	goals_res = 0,
+	points = 0;
+	
+SELECT * FROM apl ORDER BY points DESC;

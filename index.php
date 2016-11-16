@@ -107,8 +107,12 @@
       $mat = $gen->setRes($_SESSION['g1'], $_SESSION['g2']);
       $mes = ($mat) ? "Данные внесены успешно" 
                     : "Произошла ошибка при внесении данных: ".$gen->db->error;
-      echo $mes;
+      $mes = $_SESSION['mes_upd'];
+      unset($_SESSION['g1']);
+      unset($_SESSION['g2']);
+      unset($_SESSION['upd']);
     }
+    echo $_SESSION['mes_upd']; unset($_SESSION['mes_upd']);
   
   //catch (Exception $e){ echo $e->getMessage()."<br>"; }
   
