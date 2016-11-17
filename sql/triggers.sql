@@ -133,6 +133,72 @@ BEGIN
 END |
 DELIMITER ;
 
+DELIMITER |
+CREATE TRIGGER after_ins_resTemp
+AFTER INSERT ON results_temp FOR EACH ROW
+BEGIN
+	UPDATE apl_temp
+		SET apl_temp.goals_out = apl_temp.goals_out + g1,
+			apl_temp.goals_in = apl_temp.goals_in + g2
+		WHERE t1 = apl_temp.name;	
+		
+	UPDATE apl_temp
+		SET apl_temp.goals_out = apl_temp.goals_out + g2,
+			apl_temp.goals_in = apl_temp.goals_in + g1
+		WHERE t2 = apl_temp.name;
+	
+	IF Ng1 > g2 THEN
+		UPDATE apl_temp
+			SET	wins = wins + 1,
+				points = points + 3
+			WHERE t1 = apl_temp.name;
+		UPDATE apl_temp
+			SET lose = lose + 1
+			WHERE t2 = apl_temp.name;
+	END IF;
+	
+	IF Ng1 < g2 THEN
+		UPDATE apl_temp
+			SET	wins = wins + 1,
+				points = points + 3
+			WHERE t2 = apl_temp.name;
+		UPDATE apl_temp
+			SET lose = lose + 1
+			WHERE t1 = apl_temp.name;
+	END IF;
+	
+	IF g1 = g2 THEN
+		UPDATE apl_temp
+			SET	nich = wins + 1,
+				points = points + 1
+			WHERE t1 = apl_temp.name
+				OR t2 = apl_temp.name;
+	END IF;
+	
+	UPDATE apl_temp
+		SET plays = plays + 1,
+			goals_res = goals_out - goals_in
+		WHERE t1 = apl_temp.name
+		OR t2 = apl_temp.name;
+END |
+DELIMITER ;
+
+DELIMITER |
+CREATE TRIGGER before_ins_resTemp
+BEFORE INSERT ON results_temp FOR EACH ROW
+BEGIN
+	UPDATE apl_temp
+	SET plays = 0,
+		wins = 0,
+		nich = 0,
+		lose = 0,
+		goals_out = 0,
+		goals_in = 0,
+		goals_res = 0,
+		points = 0;
+END |
+DELIMITER ;
+
 UPDATE results 
 SET g1 = NULL, g2 = NULL
 WHERE g1 IS NOT NULL

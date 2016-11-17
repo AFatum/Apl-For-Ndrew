@@ -19,3 +19,12 @@ td {
 tr:hover td {
   background: #f2ff91; 
 }
+.table_tur
+{
+  float: right;
+  margin-right: 35%;
+}
+.td_t
+{
+  width: 30px;
+}

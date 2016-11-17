@@ -35,6 +35,8 @@ ENGINE=InnoDB;
 
 
 DROP TABLE IF EXISTS results;
+DROP TABLE IF EXISTS results_temp;
+CREATE TABLE results_temp
 CREATE TABLE results
 (
 	id INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -81,7 +83,10 @@ CREATE TABLE pl
 ) COMMENT 'Итоговая турнирная таблица Английской премьер-лиги',
 ENGINE=InnoDB;
 
+DROP TABLE IF EXISTS apl;
+DROP TABLE IF EXISTS apl_temp;
 CREATE TABLE apl
+CREATE TABLE apl_temp
 (
 	id INT UNSIGNED NOT NULL AUTO_INCREMENT,
 	name VARCHAR(20) NOT NULL DEFAULT 'comand',

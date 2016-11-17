@@ -66,7 +66,7 @@
           {
             //echo "<input type='hidden' name='id_m' value='".$r['id']."'>";
             echo "<tr>";
-            echo "<td>".$r['t1']."</td>";
+            echo "<td'>".$r['t1']."</td>";
 
             echo "<td><select name='g1[".$r['id']."]'>";
             if($r['g1'] === NULL) $sel = "selected";
@@ -112,10 +112,10 @@
           {
             $sch = $r['g1'].":".$r['g2'];
             echo "<tr>";
-            echo "<td>".$r['t1']."</td>";
+            echo "<td class='td_t'>".$r['t1']."</td>";
             echo "<td>".$sch."</td>";
-            echo "<td>".$r['t2']."</td>";
-            echo "<td>".$r['date']."</td>";
+            echo "<td class='td_t'>".$r['t2']."</td>";
+            echo "<td class='td_t'>".$r['date']."</td>";
             echo "</tr>";
           }
         echo "<tr><td colspan='4'><a href='index.php?cal=".$_GET['cal']."&upd=".$t."'>Внести результаты</a></td></tr>";
@@ -211,15 +211,54 @@
     }
     
      /**
+     * Показываем турнирную таблицу по турам
+     * @param int, $tur  - значение тура которое нужно показать
+     * return bool;
+     */
+    function showTurTable($tur)
+    {
+      if(!is_int($tur)) $tur = (int) abs($tur);
+      $sql = "CALL ins_temp(".$tur.")";
+      if(!$res = $this->db->query($sql))
+        echo "Произошла ошибка: ".$this->db->errno." при вызове процедуры ins_temp() - ".$this->db->error;
+      
+      echo "<table><caption>Турнирная таблица Английской Премьер-Лиги (Тур: ".$tur.")</caption>";
+      echo "<tr>";
+      echo "<th>#</th>";
+      echo "<th>Команда</th>";
+      echo "<th>И</th>";
+      echo "<th>В</th>";
+      echo "<th>Н</th>";
+      echo "<th>П</th>";
+      echo "<th>ЗАБ</th>";
+      echo "<th>ПРО</th>";
+      echo "<th>РАЗН</th>";
+      echo "<th>О</th>";
+      echo "</tr>";
+      $i = 1;
+      foreach($res->fetch_all(MYSQLI_ASSOC) as $items)
+      {
+        echo "<tr>";
+        echo "<td>".$i."</td>";
+        foreach ($items as $k => $it) // выводим данные из турнирной таблицы
+        { if($k == 'id') continue; echo "<td>".$it."</td>"; }
+        echo "</tr>";
+        $i++;
+      }
+      echo "</table>";
+      
+    }
+    
+     /**
      * Показываем турнирную таблицу
      * @param array, $g1  - значение голов забитыми хозяевами
      * @param array, $g2  - значение голов забитыми гостями
      * return bool;
      */
     
-    function showTurTable()
+    function showAplTable()
     {
-      $sql = "SELECT * FROM apl ORDER BY points DESC";
+      $sql = "SELECT * FROM apl ORDER BY points DESC, goals_res DESC, goals_out DESC";
       
       if(!$res = $this->db->query($sql))
         return "Произошла ошибка получения данных".$this->db->error;
@@ -256,7 +295,6 @@
      * @param string, $m  - значение месяца, который нужно перевести
      * return string; // возвращает русское название месяца
      */
-    
     function transMonth($m)
     {
       switch($m)
@@ -300,7 +338,7 @@
         case 'December':  $m = 'Декабрь'; break;
         default:  $m = date('F');
       }
-      return date('d').$m.date('Y');
+      return date('d')." ".$m." ".date('Y');
     }
     
   }

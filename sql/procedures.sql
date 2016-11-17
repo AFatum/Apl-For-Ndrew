@@ -42,3 +42,34 @@ CREATE VIEW currCourses AS
 		FROM lessons
 		WHERE MONTH(lesson_date) = 9
 		  AND YEAR(lesson_date) = 2006
+END; |
+		  
+SHOW PROCEDURE STATUS LIKE 'pattern';
+
+DROP PROCEDURE IF EXISTS ins_temp;
+		  
+DELIMITER |
+CREATE PROCEDURE ins_temp (IN tur INT)
+	IF ((SELECT MAX(tour) FROM results_temp) = tur)
+		THEN SELECT * FROM apl_temp;
+	ELSE 
+		DELETE FROM results_temp;
+		INSERT INTO results_temp
+			SELECT * FROM results
+			WHERE tour < tur + 1
+			AND g1 IS NOT NULL
+			OR g2 IS NOT NULL;
+		SELECT * FROM apl_temp;
+	END IF;
+END; |
+DELIMITER ;
+
+SHOW PROCEDURE STATUS \G
+
+select * from results 
+where tour < 11
+
+SELECT * FROM results
+WHERE tour < 11
+AND g1 IS NOT NULL
+OR g2 IS NOT NULL;
