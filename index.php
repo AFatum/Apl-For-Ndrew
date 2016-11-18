@@ -23,6 +23,7 @@
   <?php // отображаем турнирную таблицу
     if(empty($_SESSION['tur_table'])) $gen->showAplTable();
     else { $gen->showTurTable($_SESSION['tur_table']); unset($_SESSION['tur_table']); }
+  ?>
   </div>
   <?php
   //$gen->showTurTable();

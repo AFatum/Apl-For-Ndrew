@@ -262,6 +262,7 @@
      * @param int, $tur  - значение тура которое нужно показать
      * return bool;
      */
+    /*
     function showTurTable($tur)
     {
       if(!is_int($tur)) $tur = (int) abs($tur);
