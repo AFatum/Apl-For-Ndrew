@@ -113,7 +113,7 @@
             if(($_SESSION['tour_ot'] or $_SESSION['tour_do']) and $_SESSION['cal'] == 2)
               $gen->getTableDiap($_SESSION['tour_ot'], $_SESSION['tour_do'], $_GET['upd']);    
             
-        }
+      }
       
         if($_GET['cal'] == 2) // отображаем весь календарь
           $gen->getTableDiap(1, 38, $_GET['upd']);

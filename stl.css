@@ -13,7 +13,7 @@ th {
  }
 td {
   color: #669;
-  border-bottom: 1px dashed #b6b6ff;
+  /*border-bottom: 1px dashed #b6b6ff;*/
   padding: 10px 12px;
 }
 tr:hover td {
@@ -24,7 +24,11 @@ tr:hover td {
   float: right;
   margin-right: 35%;
 }
-.td_t
-{
-  width: 30px;
-}
+
+/*Стили для отдельных столбцов/строк*/
+.td_t { width: 155px; }
+.td_d { width: 83px; }
+.td_s { width: 23px; text-align: center; }
+.td_t1 { text-align: right; }
+.td_upd_sh { width: 15px; }
+.tr_bg td { background: #e7e7ff; } 

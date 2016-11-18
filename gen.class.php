@@ -68,7 +68,7 @@
             echo "<tr>";
             echo "<td'>".$r['t1']."</td>";
 
-            echo "<td><select name='g1[".$r['id']."]'>";
+            echo "<td class='td_upd_sh'><select name='g1[".$r['id']."]'>";
             if($r['g1'] === NULL) $sel = "selected";
             echo "<option ".$sel." value='-'>&ndash;</option>";
               for($i=0; $i<10; $i++)
@@ -80,10 +80,10 @@
               }
             echo "</select></td>";
 
-            echo "<td> : </td>";
+            echo "<td class='td_upd_sh> : </td>";
 
             //echo "<td><select name='g2'>";
-            echo "<td><select name='g2[".$r['id']."]'>";
+            echo "<td class='td_upd_sh><select name='g2[".$r['id']."]'>";
             echo "<option value='-'>&ndash;</option>";
               for($i=0; $i<10; $i++)
               {
@@ -108,15 +108,19 @@
       {
         echo "<table>";
           echo "<caption>Тур ".$t."</caption>";
+          $bg = 0;
           foreach($res as $r)
           {
+            if($bg < 1) $bg = 1;
             $sch = $r['g1'].":".$r['g2'];
-            echo "<tr>";
-            echo "<td class='td_t'>".$r['t1']."</td>";
-            echo "<td>".$sch."</td>";
+            echo ($bg == 2) ? "<tr class='tr_bg'>" : "<tr>";
+            echo "<td class='td_t td_t1'>".$r['t1']."</td>";
+            echo "<td class='td_s'>".$sch."</td>";
             echo "<td class='td_t'>".$r['t2']."</td>";
-            echo "<td class='td_t'>".$r['date']."</td>";
+            echo "<td class='td_d'>".$r['date']."</td>";
             echo "</tr>";
+            if($bg == 1) { $bg = 2; continue; }
+            if($bg == 2) $bg = 1;
           }
         echo "<tr><td colspan='4'><a href='index.php?cal=".$_GET['cal']."&upd=".$t."'>Внести результаты</a></td></tr>";
         echo "</table>";         
