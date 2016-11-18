@@ -23,10 +23,9 @@
   <?php // отображаем турнирную таблицу
     if(empty($_SESSION['tur_table'])) $gen->showAplTable();
     else { $gen->showTurTable($_SESSION['tur_table']); unset($_SESSION['tur_table']); }
-    
-  ?>
   </div>
   <?php
+  //$gen->showTurTable();
   
     if($_POST) // заносим значение сессионных переменных
     {
@@ -54,6 +53,7 @@
       }
       
       if($_POST['tur_table'])
+
         $_SESSION['tur_table'] = (int) abs($_POST['tur_table']);
       
       header("Location: index.php".$gt);
@@ -113,7 +113,7 @@
             if(($_SESSION['tour_ot'] or $_SESSION['tour_do']) and $_SESSION['cal'] == 2)
               $gen->getTableDiap($_SESSION['tour_ot'], $_SESSION['tour_do'], $_GET['upd']);    
             
-      }
+        }
       
         if($_GET['cal'] == 2) // отображаем весь календарь
           $gen->getTableDiap(1, 38, $_GET['upd']);

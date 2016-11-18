@@ -68,6 +68,7 @@
             echo "<tr>";
             echo "<td'>".$r['t1']."</td>";
 
+            //echo "<td><select name='g1[".$r['id']."]'>";
             echo "<td class='td_upd_sh'><select name='g1[".$r['id']."]'>";
             if($r['g1'] === NULL) $sel = "selected";
             echo "<option ".$sel." value='-'>&ndash;</option>";
@@ -106,6 +107,7 @@
       //if(!$upd)
       else
       {
+        $bg = 0;
         echo "<table>";
           echo "<caption>Тур ".$t."</caption>";
           $bg = 0;
@@ -118,6 +120,14 @@
             echo "<td class='td_s'>".$sch."</td>";
             echo "<td class='td_t'>".$r['t2']."</td>";
             echo "<td class='td_d'>".$r['date']."</td>";
+
+            /*
+            echo "<tr>";
+            echo "<td>".$r['t1']."</td>";
+            echo "<td>".$sch."</td>";
+            echo "<td>".$r['t2']."</td>";
+            echo "<td>".$r['date']."</td>";
+            */
             echo "</tr>";
             if($bg == 1) { $bg = 2; continue; }
             if($bg == 2) $bg = 1;
@@ -212,6 +222,39 @@
         if(!$this->db->query($sql)) return false;
       return true;
       //return $sql;
+    }
+    
+    function showTurTable($tur)
+    {
+      if(!is_int($tur)) $tur = (int) abs($tur);
+      $sql = "CALL ins_temp(".$tur.")";
+      if(!$res = $this->db->query($sql))
+        echo "Произошла ошибка: ".$this->db->errno." при вызове процедуры ins_temp() - ".$this->db->error;
+      
+      echo "<table><caption>Турнирная таблица Английской Премьер-Лиги (Тур: ".$tur.")</caption>";
+      echo "<tr>";
+      echo "<th>#</th>";
+      echo "<th>Команда</th>";
+      echo "<th>И</th>";
+      echo "<th>В</th>";
+      echo "<th>Н</th>";
+      echo "<th>П</th>";
+      echo "<th>ЗАБ</th>";
+      echo "<th>ПРО</th>";
+      echo "<th>РАЗН</th>";
+      echo "<th>О</th>";
+      echo "</tr>";
+      $i = 1;
+      foreach($res->fetch_all(MYSQLI_ASSOC) as $items)
+      {
+        echo "<tr>";
+        echo "<td>".$i."</td>";
+        foreach ($items as $k => $it) // выводим данные из турнирной таблицы
+        { if($k == 'id') continue; echo "<td>".$it."</td>"; }
+        echo "</tr>";
+        $i++;
+      }
+      echo "</table>"; 
     }
     
      /**
