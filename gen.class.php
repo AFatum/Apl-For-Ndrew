@@ -210,6 +210,39 @@
       //return $sql;
     }
     
+    function showTurTable($tur)
+    {
+      if(!is_int($tur)) $tur = (int) abs($tur);
+      $sql = "CALL ins_temp(".$tur.")";
+      if(!$res = $this->db->query($sql))
+        echo "Произошла ошибка: ".$this->db->errno." при вызове процедуры ins_temp() - ".$this->db->error;
+      
+      echo "<table><caption>Турнирная таблица Английской Премьер-Лиги (Тур: ".$tur.")</caption>";
+      echo "<tr>";
+      echo "<th>#</th>";
+      echo "<th>Команда</th>";
+      echo "<th>И</th>";
+      echo "<th>В</th>";
+      echo "<th>Н</th>";
+      echo "<th>П</th>";
+      echo "<th>ЗАБ</th>";
+      echo "<th>ПРО</th>";
+      echo "<th>РАЗН</th>";
+      echo "<th>О</th>";
+      echo "</tr>";
+      $i = 1;
+      foreach($res->fetch_all(MYSQLI_ASSOC) as $items)
+      {
+        echo "<tr>";
+        echo "<td>".$i."</td>";
+        foreach ($items as $k => $it) // выводим данные из турнирной таблицы
+        { if($k == 'id') continue; echo "<td>".$it."</td>"; }
+        echo "</tr>";
+        $i++;
+      }
+      echo "</table>"; 
+    }
+    
      /**
      * Показываем турнирную таблицу
      * @param array, $g1  - значение голов забитыми хозяевами
@@ -217,7 +250,7 @@
      * return bool;
      */
     
-    function showTurTable()
+    function showAplTable()
     {
       $sql = "SELECT * FROM apl ORDER BY points DESC";
       

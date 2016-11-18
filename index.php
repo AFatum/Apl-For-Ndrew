@@ -12,8 +12,21 @@
   <p><a href="index.php?cal=2">Показать весь календарь</a></p>
   <p><a href="index.php?cal=2">Показать весь календарь</a></p>
   
+  <div class='table_tur'>
+  <form action="" method="post">
+     <select name='tur_table'>
+      <option selected value="0">Вся таблица</option>
+      <?php for($i=1; $i<39; $i++) echo "<option value='".$i."'>Тур: ".$i."</option>"; ?> 
+    </select>
+    <input type="submit" value="Показать">
+  </form>
+  <?php // отображаем турнирную таблицу
+    if(empty($_SESSION['tur_table'])) $gen->showAplTable();
+    else { $gen->showTurTable($_SESSION['tur_table']); unset($_SESSION['tur_table']); }
+  ?>
+  </div>
   <?php
-  $gen->showTurTable();
+  //$gen->showTurTable();
   
     if($_POST) // заносим значение сессионных переменных
     {
@@ -39,6 +52,9 @@
         $_SESSION['upd'] = true;
         $gt = "?cal=".$_GET['cal']."&upd=".$_GET['upd'];
       }
+      
+       if($_POST['tur_table'])
+        $_SESSION['tur_table'] = (int) abs($_POST['tur_table']);
       
       header("Location: index.php".$gt);
     }
