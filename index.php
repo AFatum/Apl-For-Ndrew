@@ -53,8 +53,7 @@
         $gt = "?cal=".$_GET['cal']."&upd=".$_GET['upd'];
       }
       
-      if($_POST['tur_table'])
-
+       if($_POST['tur_table'])
         $_SESSION['tur_table'] = (int) abs($_POST['tur_table']);
       
       header("Location: index.php".$gt);
