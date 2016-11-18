@@ -164,9 +164,18 @@ UPDATE results
 UPDATE results 
 SET g1 = NULL, g2 = NULL
 WHERE g1 IS NOT NULL
+OR g2 IS NOT NULL;	
+	
+UPDATE results_temp
+SET g1 = NULL, g2 = NULL
+WHERE g1 IS NOT NULL
 OR g2 IS NOT NULL;
 		
 SELECT * FROM results
+WHERE g1 IS NOT NULL
+OR g2 IS NOT NULL;	
+	
+SELECT * FROM results_temp
 WHERE g1 IS NOT NULL
 OR g2 IS NOT NULL;
 
@@ -180,4 +189,22 @@ SET plays = 0,
 	goals_res = 0,
 	points = 0;
 	
+UPDATE apl_temp
+SET plays = 0,
+	wins = 0,
+	nich = 0,
+	lose = 0,
+	goals_out = 0,
+	goals_in = 0,
+	goals_res = 0,
+	points = 0;
+	
 SELECT * FROM apl ORDER BY points DESC;
+
+UPDATE results
+	SET t1 = 'Ìטהכסבנמ'
+	WHERE t1 = 'Ìטההכסבנמ';
+	
+UPDATE results
+	SET t2 = 'Ìטהכסבנמ'
+	WHERE t2 = 'Ìטההכסבנמ';

@@ -63,8 +63,36 @@ CREATE PROCEDURE ins_temp (IN tur INT)
 	END IF;
 END; |
 DELIMITER ;
+	  
+DELIMITER |
+CREATE PROCEDURE ins_temp (IN tur INT)
+BEGIN
+		DELETE FROM results_temp;
+		INSERT INTO results_temp
+			SELECT * FROM results
+			WHERE results.tour < tur + 1
+			AND g1 IS NOT NULL
+			OR g2 IS NOT NULL;
+		SELECT * FROM apl_temp;
+END |
+DELIMITER ;	
+  
+DELIMITER |
+CREATE PROCEDURE ins_temp (IN tur INT)
+BEGIN
+		DELETE FROM results_temp;
+		INSERT INTO results_temp
+			SELECT * FROM results
+			WHERE results.tour < tur + 1
+			AND g1 IS NOT NULL
+			OR g2 IS NOT NULL;
+		SELECT tur;
+END |
+DELIMITER ;
 
 SHOW PROCEDURE STATUS \G
+
+SHOW CREATE PROCEDURE ins_temp \G
 
 select * from results 
 where tour < 11

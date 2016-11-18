@@ -10,7 +10,6 @@
   <h1>Английская Премьер-Лига, сезон 16/17</h1>
   <p><a href="index.php?cal=1">Выбрать тур</a></p>
   <p><a href="index.php?cal=2">Показать весь календарь</a></p>
-  <p><a href="index.php?cal=2">Показать весь календарь</a></p>
   
   <div class='table_tur'>
   <form action="" method="post">
@@ -50,7 +49,8 @@
         $_SESSION['g1'] = $_POST['g1'];
         $_SESSION['g2'] = $_POST['g2'];
         $_SESSION['upd'] = true;
-        $gt = "?cal=".$_GET['cal']."&upd=".$_GET['upd'];
+        //$gt = "?cal=".$_GET['cal']."&upd=".$_GET['upd'];
+        $gt = "?cal=".$_GET['cal'];
       }
       
        if($_POST['tur_table'])
@@ -116,7 +116,8 @@
         }
       
         if($_GET['cal'] == 2) // отображаем весь календарь
-          $gen->getTableDiap(1, 38, $_GET['upd']);
+          if(!$gen->getTableDiap(1, 38, $_GET['upd']))
+            echo "Ошибка в 119 строке".$gen->db->error;
     } // конец $_GET['cal']
     
     //if($_SESSION['upd']) // вносим изменения результатов в БД

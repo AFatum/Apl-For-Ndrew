@@ -22,13 +22,21 @@ tr:hover td {
 .table_tur
 {
   float: right;
-  margin-right: 35%;
+  margin-right: 25%;
 }
 
 /*Стили для отдельных столбцов/строк*/
 .td_t { width: 155px; }
 .td_d { width: 83px; }
 .td_s { width: 23px; text-align: center; }
+.th_haed { width: 45px; text-align: center; }
 .td_t1 { text-align: right; }
-.td_upd_sh { width: 15px; }
+.td_upd_sh { width: 32px; }
 .tr_bg td { background: #e7e7ff; } 
+.tr_lc1 td { background: #fbffda; } 
+.tr_lc2 td { background: #fffb9c; } 
+.tr_le td { background: #fce898; } 
+.tr_head_bg th { background: #46469b; color: aliceblue; } 
+.apl tr td {text-align: center;}
+.td_name {text-align: left !important;}
+

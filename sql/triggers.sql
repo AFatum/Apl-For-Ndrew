@@ -83,6 +83,8 @@ BEGIN
 END |
 DELIMITER ;
 
+DROP TRIGGER IF EXISTS after_update_results;
+
 DELIMITER |
 CREATE TRIGGER after_update_results
 AFTER UPDATE ON results FOR EACH ROW
@@ -119,7 +121,7 @@ BEGIN
 	
 	IF NEW.g1 = NEW.g2 THEN
 		UPDATE apl
-			SET	nich = wins + 1,
+			SET	nich = nich + 1,
 				points = points + 1
 			WHERE NEW.t1 = apl.name
 				OR NEW.t2 = apl.name;
@@ -133,59 +135,79 @@ BEGIN
 END |
 DELIMITER ;
 
+DROP TRIGGER IF EXISTS after_ins_resTemp;
+
 DELIMITER |
 CREATE TRIGGER after_ins_resTemp
 AFTER INSERT ON results_temp FOR EACH ROW
 BEGIN
 	UPDATE apl_temp
-		SET apl_temp.goals_out = apl_temp.goals_out + g1,
-			apl_temp.goals_in = apl_temp.goals_in + g2
-		WHERE t1 = apl_temp.name;	
+		SET apl_temp.goals_out = apl_temp.goals_out + NEW.g1,
+			apl_temp.goals_in = apl_temp.goals_in + NEW.g2
+		WHERE NEW.t1 = apl_temp.name;	
 		
 	UPDATE apl_temp
-		SET apl_temp.goals_out = apl_temp.goals_out + g2,
-			apl_temp.goals_in = apl_temp.goals_in + g1
-		WHERE t2 = apl_temp.name;
+		SET apl_temp.goals_out = apl_temp.goals_out + NEW.g2,
+			apl_temp.goals_in = apl_temp.goals_in + NEW.g1
+		WHERE NEW.t2 = apl_temp.name;
 	
-	IF Ng1 > g2 THEN
+	IF NEW.g1 > NEW.g2 THEN
 		UPDATE apl_temp
 			SET	wins = wins + 1,
 				points = points + 3
-			WHERE t1 = apl_temp.name;
+			WHERE NEW.t1 = apl_temp.name;
 		UPDATE apl_temp
 			SET lose = lose + 1
-			WHERE t2 = apl_temp.name;
+			WHERE NEW.t2 = apl_temp.name;
 	END IF;
 	
-	IF Ng1 < g2 THEN
+	IF NEW.g1 < NEW.g2 THEN
 		UPDATE apl_temp
 			SET	wins = wins + 1,
 				points = points + 3
-			WHERE t2 = apl_temp.name;
+			WHERE NEW.t2 = apl_temp.name;
 		UPDATE apl_temp
 			SET lose = lose + 1
-			WHERE t1 = apl_temp.name;
+			WHERE NEW.t1 = apl_temp.name;
 	END IF;
 	
-	IF g1 = g2 THEN
+	IF NEW.g1 = NEW.g2 THEN
 		UPDATE apl_temp
-			SET	nich = wins + 1,
+			SET	nich = nich + 1,
 				points = points + 1
-			WHERE t1 = apl_temp.name
-				OR t2 = apl_temp.name;
+			WHERE NEW.t1 = apl_temp.name
+				OR NEW.t2 = apl_temp.name;
 	END IF;
 	
 	UPDATE apl_temp
 		SET plays = plays + 1,
 			goals_res = goals_out - goals_in
-		WHERE t1 = apl_temp.name
-		OR t2 = apl_temp.name;
+		WHERE NEW.t1 = apl_temp.name
+		OR NEW.t2 = apl_temp.name;
+END |
+DELIMITER ;
+
+DROP TRIGGER IF EXISTS before_ins_resTemp;
+
+DELIMITER |
+CREATE TRIGGER before_ins_resTemp
+BEFORE INSERT ON results_temp FOR EACH ROW
+BEGIN
+	UPDATE apl_temp
+	SET plays = 0,
+		wins = 0,
+		nich = 0,
+		lose = 0,
+		goals_out = 0,
+		goals_in = 0,
+		goals_res = 0,
+		points = 0;
 END |
 DELIMITER ;
 
 DELIMITER |
 CREATE TRIGGER before_ins_resTemp
-BEFORE INSERT ON results_temp FOR EACH ROW
+BEFORE INSERT ON results_temp
 BEGIN
 	UPDATE apl_temp
 	SET plays = 0,
