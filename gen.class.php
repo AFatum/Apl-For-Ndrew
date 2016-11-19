@@ -3,6 +3,20 @@
   session_start();
   //$db = new mysqli("localhost", "root", "", "apl");
 
+if ($_SERVER['SERVER_NAME'] == "apl-for-ndrew.herokuapp.com") {
+    define("HOST", "us-cdbr-iron-east-04.cleardb.net");
+    define("USER", "ba59d3d7195e2d");
+    define("PASS", "1338322d");
+    define("DB", "heroku_5b92132e753a645");
+} else {
+    define("HOST", "localhost");
+    define("USER", "root");
+    define("PASS", "");
+    define("DB", "pl");
+}
+
+
+
   class Gen
   {
     public $db;
@@ -377,6 +391,6 @@
     
   }
 
-  $gen = new Gen(new mysqli("localhost", "root", "", "pl"));
+  $gen = new Gen(new mysqli(HOST, USER, PASS, DB));
 
 ?>
