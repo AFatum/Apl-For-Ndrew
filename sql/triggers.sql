@@ -191,7 +191,28 @@ DROP TRIGGER IF EXISTS before_ins_resTemp;
 
 DELIMITER |
 CREATE TRIGGER before_ins_resTemp
-BEFORE INSERT ON results_temp FOR EACH ROW
+BEFORE INSERT ON results_temp
+BEGIN
+	UPDATE apl_temp
+	SET plays = 0,
+		wins = 0,
+		nich = 0,
+		lose = 0,
+		goals_out = 0,
+		goals_in = 0,
+		goals_res = 0,
+		points = 0;
+		
+	UPDATE results_temp
+		SET g1 = NULL, g2 = NULL
+		WHERE g1 IS NOT NULL
+		OR g2 IS NOT NULL;
+END |
+DELIMITER ;
+
+DELIMITER |
+CREATE TRIGGER before_ins_resTemp
+BEFORE INSERT ON results_temp
 BEGIN
 	UPDATE apl_temp
 	SET plays = 0,
@@ -207,7 +228,7 @@ DELIMITER ;
 
 DELIMITER |
 CREATE TRIGGER before_ins_resTemp
-BEFORE INSERT ON results_temp
+BEFORE INSERT ON results_temp FOR EACH ROW
 BEGIN
 	UPDATE apl_temp
 	SET plays = 0,

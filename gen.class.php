@@ -252,7 +252,8 @@
       if(!$res = $this->db->query($sql))
         echo "Произошла ошибка: ".$this->db->errno." при вызове процедуры ins_temp() - ".$this->db->error;
       $result = $res->fetch_all(MYSQLI_ASSOC);
-      $res->free;
+      //$res->free;
+      while($this->db->next_result()) $this->db->store_result();
       
       echo "<table class='apl'><caption>Турнирная таблица Английской Премьер-Лиги (Тур: ".$tur.")</caption>";
       
@@ -287,7 +288,7 @@
      */   
     function showAplTable()
     {
-      $sql = "SELECT * FROM apl ORDER BY points DESC";
+      $sql = "SELECT * FROM apl ORDER BY points DESC, goals_res DESC, goals_out DESC";
       
       if(!$res = $this->db->query($sql))
         return "Произошла ошибка получения данных".$this->db->error;

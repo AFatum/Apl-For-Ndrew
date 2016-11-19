@@ -64,18 +64,28 @@ CREATE PROCEDURE ins_temp (IN tur INT)
 END; |
 DELIMITER ;
 	  
+	SELECT * FROM results
+		WHERE tour < 2
+		AND EXISTS(SELECT * FROM results as res
+					WHERE res.g1 IS NOT NULL
+						OR res.g2 IS NOT NULL);
+		AND g1 IS NOT NULL
+		OR g2 IS NOT NULL;
+	  
+	  
 DELIMITER |
 CREATE PROCEDURE ins_temp (IN tur INT)
 BEGIN
 		DELETE FROM results_temp;
 		INSERT INTO results_temp
 			SELECT * FROM results
-			WHERE results.tour < tur + 1
-			AND g1 IS NOT NULL
-			OR g2 IS NOT NULL;
+			WHERE tour < tur + 1
+			AND EXISTS	(SELECT * FROM results AS res 
+							WHERE res.g1 IS NOT NULL
+							OR res.g2 IS NOT NULL);
 		SELECT * FROM apl_temp;
 END |
-DELIMITER ;	
+DELIMITER ;
   
 DELIMITER |
 CREATE PROCEDURE ins_temp (IN tur INT)
@@ -83,10 +93,37 @@ BEGIN
 		DELETE FROM results_temp;
 		INSERT INTO results_temp
 			SELECT * FROM results
-			WHERE results.tour < tur + 1
+			WHERE tour < tur + 1
 			AND g1 IS NOT NULL
 			OR g2 IS NOT NULL;
-		SELECT tur;
+		SELECT tur +1;
+END |
+
+DELIMITER ; 
+
+
+DROP PROCEDURE IF EXISTS ins_temp;
+DELIMITER |
+CREATE PROCEDURE ins_temp (IN tur INT)
+BEGIN
+	UPDATE apl_temp
+	SET plays = 0,
+		wins = 0,
+		nich = 0,
+		lose = 0,
+		goals_out = 0,
+		goals_in = 0,
+		goals_res = 0,
+		points = 0;
+		
+		DELETE FROM results_temp;
+		INSERT INTO results_temp
+			SELECT * FROM results
+			WHERE tour < tur + 1
+			AND EXISTS	(SELECT * FROM results AS res 
+							WHERE res.g1 IS NOT NULL
+							OR res.g2 IS NOT NULL);
+		SELECT * FROM apl_temp ORDER BY points DESC, goals_res DESC, goals_out DESC;
 END |
 DELIMITER ;
 
