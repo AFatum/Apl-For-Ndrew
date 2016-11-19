@@ -1,4 +1,5 @@
 <?php
+  header( 'Content-Type: text/html; charset=utf-8' );
   ob_start();
   session_start();
   //$db = new mysqli("localhost", "root", "", "apl");
@@ -32,7 +33,11 @@ if ($_SERVER['SERVER_NAME'] == "apl-for-ndrew.herokuapp.com") {
       // если не удалось соедениться с бд, отлавливаем исключение
         if ($db->connect_errno)
          throw new Exception("Не удалось подключиться к MySQL: (".$db->connect_errno.") ". $db->connect_error);
-        else $this->db = $db; // если всё нормально, присваиваем значение $db;
+        else 
+        {
+          $this->db = $db; // если всё нормально, присваиваем значение $db;
+          $this->db->query('set names cp1251');
+        }
     }
     
     /**

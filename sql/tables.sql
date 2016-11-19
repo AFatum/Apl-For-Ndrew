@@ -36,8 +36,8 @@ ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS results;
 DROP TABLE IF EXISTS results_temp;
-CREATE TABLE results_temp
 CREATE TABLE results
+CREATE TABLE results_temp
 (
 	id INT UNSIGNED NOT NULL AUTO_INCREMENT,
 	t1 VARCHAR(20) NOT NULL DEFAULT '',
@@ -47,7 +47,7 @@ CREATE TABLE results
 	tour INT NOT NULL,
 	date DATE NOT NULL,
 	PRIMARY KEY (id)
-) COMMENT 'Таблица результатов матчей',
+) COMMENT 'Таблица результатов матчей по турам',
 ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS res;
@@ -99,5 +99,5 @@ CREATE TABLE apl_temp
 	goals_res INT NOT NULL DEFAULT '0',
 	points INT NOT NULL DEFAULT '0',
 	PRIMARY KEY (id)
-) COMMENT 'Итоговая турнирная таблица Английской премьер-лиги',
+) COMMENT 'По-туровая турнирная таблица Английской премьер-лиги',
 ENGINE=InnoDB;
