@@ -36,7 +36,8 @@ if ($_SERVER['SERVER_NAME'] == "apl-for-ndrew.herokuapp.com") {
         else 
         {
           $this->db = $db; // если всё нормально, присваиваем значение $db;
-          $this->db->query('set names cp1251');
+          //$this->db->query('set names cp1251');
+          $this->db->query('charset cp866');
         }
     }
     
