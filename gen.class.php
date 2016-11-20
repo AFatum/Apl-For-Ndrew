@@ -115,7 +115,7 @@ if ($_SERVER['SERVER_NAME'] == "apl-for-ndrew.herokuapp.com") {
               for($i=0; $i<10; $i++)
               {
                 //$sel = ($i == $r['g2']) ? "selected" : NULL;
-                if($r['g1'] !== NULL and $i == $r['g1']) $sel = "selected";
+                if($r['g2'] !== NULL and $i == $r['g2']) $sel = "selected";
                 else $sel = "NULL";
                 echo "<option ".$sel." value=".$i.">".$i."</option>";
               }
@@ -230,24 +230,17 @@ if ($_SERVER['SERVER_NAME'] == "apl-for-ndrew.herokuapp.com") {
         if($val == '-') continue;
         $match[$key]['g2'] = (int) abs($val);
       }
-      
+          
       $upd = [];
+      
       foreach($match as $key => $val)
       {
-        $upd[$key] = "UPDATE results
-                        SET g1 = ";
-        foreach($val as $k => $v)
-        {
-          if($k == 'g1') $upd[$key] .= $v.", ";
-          if($k == 'g2') $upd[$key] .= "g2 = ".$v;
-        }
-        $upd[$key] .= " WHERE ID = ".$key;
-      }
-      
-      foreach ($upd as $sql)
+        $sql = "CALL upd(".$val['g1'].",".$val['g2'].",".$key.")";
         if(!$this->db->query($sql)) return false;
+      }
+      // освобождаем следующий результат вызванной процедуры
+      while($this->db->next_result()) $this->db->store_result();
       return true;
-      //return $sql;
     }
     
     function headAplTable()
@@ -270,11 +263,88 @@ if ($_SERVER['SERVER_NAME'] == "apl-for-ndrew.herokuapp.com") {
     function showTurTable($tur)
     {
       if(!is_int($tur)) $tur = (int) abs($tur);
+      
+      // 1 - получаем данные из таблицы results_temp
+      $sql = "CALL ins_tempRes(".$tur.")";
+      /*
+      $sql = "INSERT INTO results_temp SELECT * FROM results WHERE tour < 1 + ".$tur;
+      if(!$this->db->query($sql))
+        return "Произошла ошибка: ".$this->db->errno." при внесении данных в таблицу results_temp - ".$this->db->error;
+      $sql = "SELECT * FROM results_temp";
+      if(!$res = $this->db->query($sql))
+        return "Произошла ошибка: ".$this->db->errno." получения данных из таблицы results_temp - ".$this->db->error;
+      $result = $res->fetch_all(MYSQLI_ASSOC); $res->free;
+      */
+      if(!$res = $this->db->query($sql))
+        return "Произошла ошибка: ".$this->db->errno." при выполнении процедуры ins_tempRes - ".$this->db->error;
+      $result = $res->fetch_all(MYSQLI_ASSOC); $res->free;
+      // 1.1 - освобождаем следующий результат вызванной процедуры
+      while($this->db->next_result()) $this->db->store_result();
+      
+      // 2 - вносим данные в таблицу apl_temp,. 
+      //.. в соответствии с полученными данными из таблицы results_temp
+      // 2.1 - Обнулыем старые данные из таблицы apl_temp
+      $sql = "UPDATE apl_temp SET
+                            plays = 0,
+                            wins = 0,
+                            nich = 0,
+                            lose = 0,
+                            goals_out = 0,
+                            goals_in = 0,
+                            goals_res = 0,
+                            points = 0";
+      if(!$this->db->query($sql))
+        return "Произошла ошибка: ".$this->db->errno." обнулении данных из таблицы apl_temp - ".$this->db->error;
+      
+      // 2.2 - Вносим новые данные в таблицу apl_temp
+      foreach ($result as $item)
+      {
+        $sql = "CALL ins_temp(".$item['id'].")";
+        if(!$this->db->query($sql)) 
+          return "Произошла ошибка: ".$this->db->errno." исполнении процедуры ins_temp - ".$this->db->error." на матче id = ".$item['id'];
+      }
+      
+      // 2.1 - освобождаем следующий результат вызванной процедуры
+      while($this->db->next_result()) $this->db->store_result();
+      
+      // 3 - получаем данные из таблицы apl_temp
+      $sql = "SELECT * FROM apl_temp ORDER BY points DESC, goals_res DESC, goals_out DESC";
+      if(!$res = $this->db->query($sql)) 
+        return "Произошла ошибка (".$this->db->errno.") при получении данных из таблицы apl_temp - ".$this->db->error;
+      $item = $res->fetch_all(MYSQLI_ASSOC); $res->free;
+      
+      // 3.1 - отрисовываем таблицу:
+      echo "<table class='apl'><caption>Турнирная таблица Английской Премьер-Лиги (Тур: ".$tur.")</caption>";
+      
+      echo $this->headAplTable(); // выводим шапку для таблицы
+      
+      $i = 1;
+      $bg = 0;
+      foreach($item as $items)
+      {
+        if($bg < 1) $bg = 1;
+        echo ($bg == 2) ? "<tr class='tr_bg'>" : "<tr>";
+        echo "<td>".$i."</td>";
+        foreach ($items as $k => $it) // выводим данные из турнирной таблицы
+        {
+          if($k == 'id') continue; 
+          echo ($k == 'name') ? "<td class='td_name'>".$it."</td>" : "<td>".$it."</td>"; 
+        }
+        echo "</tr>";
+        $i++;
+        if($bg == 1) { $bg = 2; continue; }
+        if($bg == 2) $bg = 1;
+      }
+      echo "</table>";
+    }
+    /* function showTurTable($tur)
+    {
+      if(!is_int($tur)) $tur = (int) abs($tur);
       $sql = "CALL ins_temp(".$tur.")";
       if(!$res = $this->db->query($sql))
         echo "Произошла ошибка: ".$this->db->errno." при вызове процедуры ins_temp() - ".$this->db->error;
       $result = $res->fetch_all(MYSQLI_ASSOC);
-      //$res->free;
+      // освобождаем следующий результат вызванной процедуры
       while($this->db->next_result()) $this->db->store_result();
       
       echo "<table class='apl'><caption>Турнирная таблица Английской Премьер-Лиги (Тур: ".$tur.")</caption>";
@@ -300,7 +370,7 @@ if ($_SERVER['SERVER_NAME'] == "apl-for-ndrew.herokuapp.com") {
       }
       echo "</table>"; 
     }
-    
+    */
     
      /**
      * Показываем турнирную таблицу

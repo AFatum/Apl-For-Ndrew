@@ -208,3 +208,8 @@ UPDATE results
 UPDATE results
 	SET t2 = 'Ìטהכסבנמ'
 	WHERE t2 = 'Ìטההכסבנמ';
+	
+UPDATE results
+	SET status = 1
+	WHERE g1 IS NOT NULL
+	OR g2 IS NOT NULL;

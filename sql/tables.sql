@@ -101,3 +101,7 @@ CREATE TABLE apl_temp
 	PRIMARY KEY (id)
 ) COMMENT 'По-туровая турнирная таблица Английской премьер-лиги',
 ENGINE=InnoDB;
+
+ALTER TABLE results ADD status BOOLEAN DEFAULT 0 AFTER date;
+
+

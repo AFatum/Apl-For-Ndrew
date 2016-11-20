@@ -21,7 +21,11 @@
   </form>
   <?php // отображаем турнирную таблицу
     if(empty($_SESSION['tur_table'])) $gen->showAplTable();
-    else { $gen->showTurTable($_SESSION['tur_table']); unset($_SESSION['tur_table']); }
+    else { 
+      if(is_string ($gen->showTurTable($_SESSION['tur_table'])))
+         echo $gen->showTurTable($_SESSION['tur_table']);
+      else unset($_SESSION['tur_table']); 
+    }
   ?>
   </div>
   <?php

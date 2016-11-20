@@ -33,7 +33,7 @@ END |
 DELIMITER ;
 
 
-
+/* ПРАВИЛЬНЫЙ */
 DELIMITER |
 CREATE TRIGGER after_update_results
 AFTER UPDATE ON results FOR EACH ROW
