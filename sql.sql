@@ -161,11 +161,6 @@ UPDATE results
 	WHERE id = 82
 		OR id = 84;
 		
-UPDATE results 
-SET g1 = NULL, g2 = NULL
-WHERE g1 IS NOT NULL
-OR g2 IS NOT NULL;	
-	
 UPDATE results_temp
 SET g1 = NULL, g2 = NULL
 WHERE g1 IS NOT NULL
@@ -176,6 +171,11 @@ WHERE g1 IS NOT NULL
 OR g2 IS NOT NULL;	
 	
 SELECT * FROM results_temp
+WHERE g1 IS NOT NULL
+OR g2 IS NOT NULL;
+
+UPDATE results 
+SET g1 = NULL, g2 = NULL, status = 0
 WHERE g1 IS NOT NULL
 OR g2 IS NOT NULL;
 
@@ -213,3 +213,16 @@ UPDATE results
 	SET status = 1
 	WHERE g1 IS NOT NULL
 	OR g2 IS NOT NULL;
+	
+	ALTER TABLE results ADD INDEX ix_t1 (t1);
+	ALTER TABLE results ADD INDEX ix_t2 (t2);
+	ALTER TABLE results ADD INDEX ix_g1 (g1);
+	ALTER TABLE results ADD INDEX ix_g2 (g2);
+	ALTER TABLE results_temp ADD INDEX tur (tour);
+	ALTER TABLE results ADD INDEX ix_sts (status);
+	
+	ALTER TABLE results DROP INDEX ix_t1;
+	ALTER TABLE results DROP INDEX ix_t2;
+	ALTER TABLE results DROP INDEX ix_g1;
+	ALTER TABLE results DROP INDEX ix_g2;
+	ALTER TABLE results DROP INDEX ix_tour;
